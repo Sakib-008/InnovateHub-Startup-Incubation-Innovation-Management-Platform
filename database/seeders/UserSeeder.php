@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\StartupIdea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,6 +19,18 @@ class UserSeeder extends Seeder
         ]);
 
         $founders = User::factory(5)->create(['role' => 'founder']);
+
+        $categories = ['AgriTech','EdTech','FinTech','HealthTech','SaaS'];
+
+        $founders->each(function ($founder) use ($categories) {
+            StartupIdea::create([
+                'founder_id'  => $founder->id,
+                'title'       => fake()->sentence(4),
+                'description' => fake()->paragraph(4),
+                'category'    => fake()->randomElement($categories),
+                'status'      => fake()->randomElement(['pending', 'approved', 'rejected']),
+            ]);
+        });
 
         $mentors = User::factory(3)->create([
             'role' => 'mentor',

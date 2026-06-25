@@ -9,13 +9,15 @@
             <ul class="navbar-nav me-auto">
                 @auth
                     @if (auth()->user()->isFounder())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('founder.dashboard') }}">My Startups</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('founder.dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('founder.ideas.index') }}">My Ideas</a></li>
                     @elseif (auth()->user()->isMentor())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('mentor.dashboard') }}">Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('mentor.dashboard') }}">Dashboard</a></li>
                     @elseif (auth()->user()->isInvestor())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('investor.dashboard') }}">Browse Startups</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('investor.dashboard') }}">Dashboard</a></li>
                     @elseif (auth()->user()->isAdmin())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Admin Panel</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.ideas.index') }}">Ideas</a></li>
                     @endif
                 @endauth
             </ul>
