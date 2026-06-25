@@ -59,7 +59,7 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    // ---- Relationships (stubs for now, will grow week over week) ----
+    // ---- Relationships
     public function startupIdeas()
     {
         return $this->hasMany(StartupIdea::class, 'founder_id');
@@ -68,6 +68,11 @@ class User extends Authenticatable
     public function investorProfile()
     {
         return $this->hasOne(InvestorProfile::class);
+    }
+
+    public function teamMemberships()
+    {
+        return $this->hasMany(TeamMember::class);
     }
 
     public function getAvatarUrlAttribute(): string
