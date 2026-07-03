@@ -5,23 +5,30 @@
 <h2 class="h4 mb-4">Welcome, {{ auth()->user()->name }}</h2>
 
 <div class="row g-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card text-center p-3">
-            <h5>My Ideas</h5>
+            <h6>My Ideas</h6>
             <p class="display-6">{{ auth()->user()->startupIdeas()->count() }}</p>
-            <a href="{{ route('founder.ideas.index') }}" class="btn btn-primary btn-sm">Manage Ideas</a>
+            <a href="{{ route('founder.ideas.index') }}" class="btn btn-primary btn-sm">Manage</a>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card text-center p-3">
-            <h5>Approved</h5>
-            <p class="display-6">{{ auth()->user()->startupIdeas()->approved()->count() }}</p>
+            <h6>Approved</h6>
+            <p class="display-6 text-success">{{ auth()->user()->startupIdeas()->approved()->count() }}</p>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card text-center p-3">
-            <h5>Pending</h5>
-            <p class="display-6">{{ auth()->user()->startupIdeas()->pending()->count() }}</p>
+            <h6>Mentorships</h6>
+            <p class="display-6">{{ auth()->user()->mentorshipRequestsAsFounder()->where('status','accepted')->count() }}</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center p-3">
+            <h6>Messages</h6>
+            <p class="display-6">{{ auth()->user()->unreadMessagesCount() }}</p>
+            <a href="{{ route('messages.index') }}" class="btn btn-outline-secondary btn-sm">Inbox</a>
         </div>
     </div>
 </div>

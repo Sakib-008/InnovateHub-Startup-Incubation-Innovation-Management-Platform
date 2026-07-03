@@ -19,6 +19,24 @@
                     </a>
                 @endif
 
+                @if ($idea->isApproved())
+                    <div class="d-flex gap-2 mt-3 flex-wrap">
+                        <a href="{{ route('founder.mentorship.index', $idea) }}" class="btn btn-sm btn-outline-info">
+                            Request Mentorship
+                        </a>
+
+                        <a href="{{ route('founder.milestones.index', $idea) }}" class="btn btn-sm btn-outline-success">
+                            Track Progress
+                        </a>
+                    </div>
+                @endif
+
+                @if ($idea->isRejected())
+                    <div class="alert alert-danger mt-3">
+                        <strong>Rejection reason:</strong> {{ $idea->rejection_reason }}
+                    </div>
+                @endif
+
                 @if ($idea->isRejected())
                     <div class="alert alert-danger mt-3">
                         <strong>Rejection reason:</strong> {{ $idea->rejection_reason }}

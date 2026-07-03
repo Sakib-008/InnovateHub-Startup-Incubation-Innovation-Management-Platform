@@ -13,12 +13,25 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('founder.ideas.index') }}">My Ideas</a></li>
                     @elseif (auth()->user()->isMentor())
                         <li class="nav-item"><a class="nav-link" href="{{ route('mentor.dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('mentor.requests.index') }}">Requests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('mentor.startups.index') }}">My Startups</a></li>
                     @elseif (auth()->user()->isInvestor())
                         <li class="nav-item"><a class="nav-link" href="{{ route('investor.dashboard') }}">Dashboard</a></li>
                     @elseif (auth()->user()->isAdmin())
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.ideas.index') }}">Ideas</a></li>
                     @endif
+
+                    {{-- Messages for all roles --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('messages.index') }}">
+                            Messages
+                            @php $unread = auth()->user()->unreadMessagesCount(); @endphp
+                            @if ($unread > 0)
+                                <span class="badge bg-danger rounded-pill">{{ $unread }}</span>
+                            @endif
+                        </a>
+                    </li>
                 @endauth
             </ul>
 
