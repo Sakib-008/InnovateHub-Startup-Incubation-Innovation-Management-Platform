@@ -81,4 +81,33 @@ class User extends Authenticatable
             ? asset('storage/' . $this->avatar)
             : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=0D6EFD&color=fff';
     }
+
+        public function mentorshipRequestsAsMentor()
+    {
+        return $this->hasMany(MentorshipRequest::class, 'mentor_id');
+    }
+
+    public function mentorshipRequestsAsFounder()
+    {
+        return $this->hasMany(MentorshipRequest::class, 'founder_id');
+    }
+
+    public function conversations()
+    {
+        return Conversation::where('user_one_id', $this->id)
+            ->orWhere('user_two_id', $this->id)
+            ->with(['userOne', 'userTwo', 'latestMessage'])
+            ->latest()
+            ->get();
+    }
+
+    public function unreadMessagesCount(): int
+    {
+        return Message::whereHas('conversation', function ($q) {
+            $q->where('user_one_id', $this->id)
+            ->orWhere('user_two_id', $this->id);
+        })->where('sender_id', '!=', $this->id)
+        ->whereNull('read_at')
+        ->count();
+    }
 }

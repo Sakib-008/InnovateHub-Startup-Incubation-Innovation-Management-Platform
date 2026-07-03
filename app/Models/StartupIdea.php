@@ -63,4 +63,14 @@ class StartupIdea extends Model
             ? asset('storage/' . $this->pitch_file)
             : null;
     }
+
+    public function mentorshipRequests()
+    {
+        return $this->hasMany(MentorshipRequest::class);
+    }
+
+    public function milestones()
+    {
+        return $this->hasMany(Milestone::class);
+    }
 }
