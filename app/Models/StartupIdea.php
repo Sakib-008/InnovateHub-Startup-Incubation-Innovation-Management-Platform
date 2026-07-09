@@ -73,4 +73,14 @@ class StartupIdea extends Model
     {
         return $this->hasMany(Milestone::class);
     }
+
+    public function showcase()
+    {
+        return $this->hasOne(StartupShowcase::class);
+    }
+
+    public function investmentInterests()
+    {
+        return $this->hasMany(InvestmentInterest::class);
+    }
 }

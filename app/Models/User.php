@@ -110,4 +110,14 @@ class User extends Authenticatable
         ->whereNull('read_at')
         ->count();
     }
+
+    public function eventRegistrations()
+    {
+        return $this->hasMany(EventRegistration::class);
+    }
+
+    public function investmentInterests()
+    {
+        return $this->hasMany(InvestmentInterest::class, 'investor_id');
+    }
 }
