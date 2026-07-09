@@ -20,8 +20,9 @@
     </div>
     <div class="col-md-3">
         <div class="card text-center p-3">
-            <h6>Approved</h6>
-            <p class="display-6 text-success">{{ \App\Models\StartupIdea::approved()->count() }}</p>
+            <h6>Events</h6>
+            <p class="display-6">{{ \App\Models\Event::count() }}</p>
+            <a href="{{ route('admin.events.index') }}" class="btn btn-sm btn-outline-primary">Manage</a>
         </div>
     </div>
     <div class="col-md-3">

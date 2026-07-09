@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\StartupIdea;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Event;
 
 class UserSeeder extends Seeder
 {
@@ -46,5 +47,23 @@ class UserSeeder extends Seeder
                 'investment_range' => '$10k - $100k',
             ]);
         }
+
+        $eventTitles = [
+            'Startup Pitch Night',
+            'Innovation Summit 2026',
+            'Tech Founders Meetup',
+        ];
+
+        foreach ($eventTitles as $i => $title) {
+            Event::create([
+                'created_by'  => $admin->id,
+                'title'       => $title,
+                'description' => fake()->paragraph(3),
+                'location'    => fake()->randomElement(['Dhaka', 'Chittagong', 'Sylhet', 'Online']),
+                'event_date'  => now()->addDays(($i + 1) * 10),
+                'status'      => 'upcoming',
+            ]);
+        }
     }
+    
 }

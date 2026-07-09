@@ -11,18 +11,23 @@
                     @if (auth()->user()->isFounder())
                         <li class="nav-item"><a class="nav-link" href="{{ route('founder.dashboard') }}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('founder.ideas.index') }}">My Ideas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('events.index') }}">Events</a></li>
                     @elseif (auth()->user()->isMentor())
                         <li class="nav-item"><a class="nav-link" href="{{ route('mentor.dashboard') }}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('mentor.requests.index') }}">Requests</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('mentor.startups.index') }}">My Startups</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('events.index') }}">Events</a></li>
                     @elseif (auth()->user()->isInvestor())
                         <li class="nav-item"><a class="nav-link" href="{{ route('investor.dashboard') }}">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('investor.browse') }}">Browse</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('investor.interests.index') }}">My Interests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('events.index') }}">Events</a></li>
                     @elseif (auth()->user()->isAdmin())
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.ideas.index') }}">Ideas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.events.index') }}">Events</a></li>
                     @endif
 
-                    {{-- Messages for all roles --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('messages.index') }}">
                             Messages

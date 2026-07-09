@@ -24,9 +24,11 @@
                         <a href="{{ route('founder.mentorship.index', $idea) }}" class="btn btn-sm btn-outline-info">
                             Request Mentorship
                         </a>
-
                         <a href="{{ route('founder.milestones.index', $idea) }}" class="btn btn-sm btn-outline-success">
                             Track Progress
+                        </a>
+                        <a href="{{ route('founder.showcase.edit', $idea) }}" class="btn btn-sm btn-outline-warning">
+                            Manage Showcase
                         </a>
                     </div>
                 @endif
