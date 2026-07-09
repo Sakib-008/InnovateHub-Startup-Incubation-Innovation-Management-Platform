@@ -6,10 +6,19 @@
     <title>{{ config('app.name', 'InnovateHub') }}</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
 </head>
-<body class="bg-light d-flex align-items-center" style="min-height:100vh;">
-    <div class="container" style="max-width: 480px;">
-        <h2 class="text-center mb-4 fw-bold text-primary">InnovateHub</h2>
-        @yield('content')
+<body>
+<div class="auth-wrapper">
+    <div class="container" style="max-width: 460px;">
+        <div class="card auth-card">
+            <div class="auth-header">
+                <h2>InnovateHub</h2>
+                <p>Startup Incubation & Innovation Platform</p>
+            </div>
+            <div class="auth-body">
+                @yield('content')
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

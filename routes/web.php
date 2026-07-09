@@ -12,6 +12,8 @@ use App\Http\Controllers\Founder\ShowcaseController;
 use App\Http\Controllers\Mentor\MentorshipController as MentorMentorshipController;
 use App\Http\Controllers\Investor\StartupBrowserController;
 use App\Http\Controllers\Investor\InvestmentInterestController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\IdeaApprovalController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\AttendanceController;
@@ -42,7 +44,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/{conversation}/send', [MessagingController::class, 'send'])->name('send');
     });
 
-    // Events — all roles can browse & register
+    // Events — all roles
     Route::prefix('events')->name('events.')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
         Route::get('/{event}', [EventController::class, 'show'])->name('show');
@@ -57,7 +59,6 @@ Route::middleware(['auth', 'role:founder'])
     ->group(function () {
 
     Route::get('/dashboard', fn() => view('founder.dashboard'))->name('dashboard');
-
     Route::resource('ideas', IdeaController::class);
 
     Route::get('ideas/{idea}/team/create', [TeamController::class, 'create'])->name('teams.create');
@@ -77,7 +78,6 @@ Route::middleware(['auth', 'role:founder'])
     Route::patch('ideas/{idea}/milestones/{milestone}/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('ideas/{idea}/milestones/{milestone}/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
-    // Showcase
     Route::get('ideas/{idea}/showcase', [ShowcaseController::class, 'edit'])->name('showcase.edit');
     Route::post('ideas/{idea}/showcase', [ShowcaseController::class, 'update'])->name('showcase.update');
     Route::delete('ideas/{idea}/showcase/images/{index}', [ShowcaseController::class, 'deleteImage'])->name('showcase.image.delete');
@@ -114,13 +114,21 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')->name('admin.')
     ->group(function () {
 
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // User management
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::patch('users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+    Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
+
+    // Ideas
     Route::get('ideas', [IdeaApprovalController::class, 'index'])->name('ideas.index');
     Route::get('ideas/{idea}', [IdeaApprovalController::class, 'show'])->name('ideas.show');
     Route::patch('ideas/{idea}/approve', [IdeaApprovalController::class, 'approve'])->name('ideas.approve');
     Route::patch('ideas/{idea}/reject', [IdeaApprovalController::class, 'reject'])->name('ideas.reject');
 
+    // Events
     Route::resource('events', AdminEventController::class);
     Route::patch('events/{event}/attendance/{registration}', [AttendanceController::class, 'toggle'])
         ->name('events.attendance.toggle');
