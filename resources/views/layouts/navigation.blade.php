@@ -89,13 +89,12 @@
                     @php $unread = auth()->user()->unreadMessagesCount(); @endphp
                     <li class="nav-item">
                         <a class="nav-link position-relative {{ request()->routeIs('messages.*') ? 'active' : '' }}"
-                           href="{{ route('messages.index') }}">
+                        href="{{ route('messages.index') }}">
                             💬 Messages
-                            @if ($unread > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $unread }}
-                                </span>
-                            @endif
+                            @php $unread = auth()->user()->unreadMessagesCount(); @endphp
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger unread-badge {{ $unread === 0 ? 'd-none' : '' }}">
+                                {{ $unread }}
+                            </span>
                         </a>
                     </li>
 

@@ -47,16 +47,29 @@ class MessagingController extends Controller
     }
 
     // Send a message
-    public function send(SendMessageRequest $request, Conversation $conversation): RedirectResponse
+    public function send(SendMessageRequest $request, Conversation $conversation)
     {
         $this->authorizeConversation($conversation);
 
-        Message::create([
+        $message = Message::create([
             'conversation_id' => $conversation->id,
             'sender_id'       => auth()->id(),
             'body'            => $request->body,
         ]);
 
+        // AJAX request — return JSON
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => [
+                    'id'         => $message->id,
+                    'body'       => $message->body,
+                    'created_at' => $message->created_at->format('h:i A'),
+                ],
+            ]);
+        }
+
+        // Regular form submit fallback
         return back();
     }
 

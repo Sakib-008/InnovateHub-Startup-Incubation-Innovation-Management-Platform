@@ -3,84 +3,90 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="mb-0">Browse Startups</h4>
+    <div>
+        <h4 class="mb-0">Browse Startups</h4>
+        <small id="resultCount" class="text-muted">Loading...</small>
+    </div>
     <a href="{{ route('investor.interests.index') }}" class="btn btn-outline-secondary btn-sm">
         My Interests
     </a>
 </div>
 
-{{-- Filters --}}
-<form method="GET" class="row g-2 mb-4">
-    <div class="col-md-6">
-        <input type="text" name="search" value="{{ request('search') }}"
-               class="form-control" placeholder="Search startups...">
+{{-- Currency Converter Widget --}}
+<div id="currencyWidget" class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <h6 class="mb-0">💱 Investment Currency Converter</h6>
+            <small class="text-muted">Powered by Frankfurter API (via Guzzle)</small>
+        </div>
+
+        {{-- Live exchange rates --}}
+        <div id="currentRate" class="mb-3">
+            <span class="text-muted small">Loading rates...</span>
+        </div>
+
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small">Amount (USD $)</label>
+                <input type="number" id="convertAmount" class="form-control"
+                       placeholder="e.g. 50000" min="0" step="1000">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small">Convert to</label>
+                <select id="convertTo" class="form-select">
+                    <option value="BDT">BDT — Bangladeshi Taka</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="GBP">GBP — British Pound</option>
+                    <option value="SGD">SGD — Singapore Dollar</option>
+                    <option value="AED">AED — UAE Dirham</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <div id="convertResult" class="p-2 bg-light rounded">
+                    <span class="text-muted small">Enter an amount to convert</span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <select name="category" class="form-select">
+</div>
+
+{{-- Live search filters --}}
+<div class="row g-2 mb-4">
+    <div class="col-md-7">
+        <div class="input-group">
+            <span class="input-group-text">🔍</span>
+            <input type="text" id="liveSearchInput" class="form-control"
+                   placeholder="Search startups by name or description...">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <select id="liveCategorySelect" class="form-select">
             <option value="">All categories</option>
             @foreach ($categories as $cat)
-                <option value="{{ $cat }}" {{ request('category') === $cat ? 'selected' : '' }}>
-                    {{ $cat }}
-                </option>
+                <option value="{{ $cat }}">{{ $cat }}</option>
             @endforeach
         </select>
     </div>
     <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Filter</button>
+        <div id="searchLoader" class="d-none d-flex align-items-center gap-2 h-100">
+            <div class="spinner-border spinner-border-sm text-primary"></div>
+            <small>Searching...</small>
+        </div>
     </div>
-</form>
-
-<div class="row g-3">
-    @forelse ($startups as $startup)
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100">
-                {{-- Gallery preview --}}
-                @if (!empty($startup->showcase->gallery_images))
-                    <img src="{{ asset('storage/' . $startup->showcase->gallery_images[0]) }}"
-                         class="card-img-top" style="height:160px; object-fit:cover">
-                @endif
-
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-1">
-                        <h6 class="mb-0">{{ $startup->title }}</h6>
-                        <span class="badge bg-secondary">{{ $startup->category }}</span>
-                    </div>
-
-                    @if ($startup->showcase->tagline)
-                        <p class="text-primary small mb-2">{{ $startup->showcase->tagline }}</p>
-                    @endif
-
-                    <p class="small text-muted mb-2">
-                        By {{ $startup->founder->name }}
-                    </p>
-                    <p class="small">{{ Str::limit($startup->description, 100) }}</p>
-                </div>
-
-                <div class="card-footer d-flex justify-content-between align-items-center">
-                    <small class="text-muted">
-                        {{ $startup->investment_interests_count }} interested
-                    </small>
-                    <div class="d-flex gap-1">
-                        @if (in_array($startup->id, $interestedIds))
-                            <span class="badge bg-success align-self-center">Interested</span>
-                        @endif
-                        <a href="{{ route('investor.startup.show', $startup) }}"
-                           class="btn btn-sm btn-outline-primary">View</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="col-12">
-            <div class="alert alert-info">
-                No showcased startups found.
-                @if (request()->hasAny(['search', 'category']))
-                    <a href="{{ route('investor.browse') }}">Clear filters</a>
-                @endif
-            </div>
-        </div>
-    @endforelse
 </div>
 
-<div class="mt-4">{{ $startups->links() }}</div>
+{{-- Results grid — populated by JS --}}
+<div class="row g-3" id="searchResultsGrid">
+    <div class="col-12 text-center py-4">
+        <div class="spinner-border text-primary"></div>
+        <p class="text-muted mt-2">Loading startups...</p>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    // Pass any pre-existing interested IDs to JS so the cards render correctly
+    window.interestedIds = @json($interestedIds);
+</script>
+@endpush
 @endsection

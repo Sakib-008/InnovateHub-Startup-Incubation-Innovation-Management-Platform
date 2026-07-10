@@ -32,6 +32,20 @@ Route::middleware('auth')->group(function () {
         };
     })->name('dashboard');
 
+    // ---- Internal JSON API (auth required) ----
+    Route::middleware('auth')->prefix('api')->name('api.')->group(function () {
+
+        // Currency (Guzzle + Frankfurter external API)
+        Route::get('currency/rates',          [\App\Http\Controllers\Api\CurrencyController::class, 'rates'])->name('currency.rates');
+        Route::get('currency/convert',        [\App\Http\Controllers\Api\CurrencyController::class, 'convert'])->name('currency.convert');
+
+        // Live startup search (AJAX)
+        Route::get('startups/search',         [\App\Http\Controllers\Api\StartupSearchController::class, 'search'])->name('startups.search');
+
+        // Unread message count (polling)
+        Route::get('messages/unread-count',   [\App\Http\Controllers\Api\MessageController::class, 'unreadCount'])->name('messages.unread');
+    });
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
