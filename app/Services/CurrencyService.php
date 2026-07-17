@@ -10,30 +10,25 @@ use Illuminate\Support\Facades\Log;
 class CurrencyService
 {
     private Client $client;
-    private string $baseUrl = 'https://api.frankfurter.app';
 
     public function __construct()
     {
         $this->client = new Client([
-            'base_uri' => $this->baseUrl,
+            'base_uri' => 'https://api.frankfurter.dev',
             'timeout'  => 5.0,
         ]);
     }
 
-    /**
-     * Get latest exchange rates relative to USD.
-     * Results cached for 6 hours to avoid hammering the free API.
-     */
     public function getLatestRates(string $base = 'USD'): array
     {
         $cacheKey = "exchange_rates_{$base}";
 
         return Cache::remember($cacheKey, now()->addHours(6), function () use ($base) {
             try {
-                $response = $this->client->get('/latest', [
+                $response = $this->client->get('/v1/latest', [
                     'query' => [
-                        'from'   => $base,
-                        'to'     => 'EUR,GBP,BDT,SGD,AED',
+                        'base'    => $base,
+                        'symbols' => 'EUR,GBP,SGD,JPY,INR,AUD,CAD,CHF',
                     ],
                 ]);
 
@@ -47,16 +42,18 @@ class CurrencyService
             } catch (RequestException $e) {
                 Log::warning('CurrencyService: API call failed — ' . $e->getMessage());
 
-                // Fallback rates if API is unreachable
                 return [
-                    'base'  => $base,
-                    'date'  => now()->toDateString(),
-                    'rates' => [
+                    'base'     => $base,
+                    'date'     => now()->toDateString(),
+                    'rates'    => [
                         'EUR' => 0.92,
                         'GBP' => 0.79,
-                        'BDT' => 110.50,
                         'SGD' => 1.34,
-                        'AED' => 3.67,
+                        'JPY' => 149.50,
+                        'INR' => 83.12,
+                        'AUD' => 1.53,
+                        'CAD' => 1.36,
+                        'CHF' => 0.89,
                     ],
                     'fallback' => true,
                 ];
@@ -64,17 +61,33 @@ class CurrencyService
         });
     }
 
-    /**
-     * Convert an amount from USD to a target currency.
-     */
-    public function convert(float $amount, string $to = 'BDT'): ?float
+    public function convert(float $amount, string $to): ?float
     {
-        $rates = $this->getLatestRates();
+        // Can't convert USD to USD via this API
+        if (strtoupper($to) === 'USD') {
+            return $amount;
+        }
 
-        if (! isset($rates['rates'][$to])) {
+        $rates = $this->getLatestRates('USD');
+
+        if (! isset($rates['rates'][strtoupper($to)])) {
             return null;
         }
 
-        return round($amount * $rates['rates'][$to], 2);
+        return round($amount * $rates['rates'][strtoupper($to)], 2);
+    }
+
+    public function getSupportedCurrencies(): array
+    {
+        return [
+            'EUR' => 'Euro',
+            'GBP' => 'British Pound',
+            'SGD' => 'Singapore Dollar',
+            'JPY' => 'Japanese Yen',
+            'INR' => 'Indian Rupee',
+            'AUD' => 'Australian Dollar',
+            'CAD' => 'Canadian Dollar',
+            'CHF' => 'Swiss Franc',
+        ];
     }
 }

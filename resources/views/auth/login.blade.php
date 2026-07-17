@@ -42,25 +42,4 @@
         <a href="{{ route('register') }}" class="text-decoration-none">Create one</a>
     </p>
 </form>
-
-{{-- Demo credentials helper --}}
-<div class="mt-4 pt-3 border-top">
-    <p class="text-muted small text-center mb-2">Demo accounts</p>
-    <div class="row g-1">
-        @foreach ([
-            ['admin@innovatehub.test', 'Admin'],
-        ] as [$email, $label])
-            <div class="col-12">
-                <button type="button"
-                        class="btn btn-outline-secondary btn-sm w-100"
-                        onclick="
-                            document.getElementById('email').value='{{ $email }}';
-                            document.getElementById('password').value='password';
-                        ">
-                    Fill {{ $label }} credentials
-                </button>
-            </div>
-        @endforeach
-    </div>
-</div>
 @endsection

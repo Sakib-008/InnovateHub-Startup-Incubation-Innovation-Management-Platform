@@ -17,12 +17,11 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-start mb-2">
             <h6 class="mb-0">💱 Investment Currency Converter</h6>
-            <small class="text-muted">Powered by Frankfurter API (via Guzzle)</small>
+            <small class="text-muted">Live rates via Frankfurter API</small>
         </div>
 
-        {{-- Live exchange rates --}}
         <div id="currentRate" class="mb-3">
-            <span class="text-muted small">Loading rates...</span>
+            <span class="text-muted small">Loading exchange rates...</span>
         </div>
 
         <div class="row g-2 align-items-end">
@@ -34,11 +33,14 @@
             <div class="col-md-3">
                 <label class="form-label small">Convert to</label>
                 <select id="convertTo" class="form-select">
-                    <option value="BDT">BDT — Bangladeshi Taka</option>
                     <option value="EUR">EUR — Euro</option>
                     <option value="GBP">GBP — British Pound</option>
                     <option value="SGD">SGD — Singapore Dollar</option>
-                    <option value="AED">AED — UAE Dirham</option>
+                    <option value="JPY">JPY — Japanese Yen</option>
+                    <option value="INR">INR — Indian Rupee</option>
+                    <option value="AUD">AUD — Australian Dollar</option>
+                    <option value="CAD">CAD — Canadian Dollar</option>
+                    <option value="CHF">CHF — Swiss Franc</option>
                 </select>
             </div>
             <div class="col-md-5">
