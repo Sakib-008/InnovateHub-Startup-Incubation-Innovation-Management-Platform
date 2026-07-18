@@ -13,6 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'no-cache' => \App\Http\Middleware\PreventBackHistory::class,
+        ]);
+
+        // Apply to all authenticated routes automatically
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
