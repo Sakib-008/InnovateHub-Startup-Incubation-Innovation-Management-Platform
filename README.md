@@ -17,7 +17,6 @@
 - [Installation & Setup](#installation--setup)
 - [Demo Accounts](#demo-accounts)
 - [Project Structure](#project-structure)
-- [Git Commit History](#git-commit-history)
 
 ---
 
