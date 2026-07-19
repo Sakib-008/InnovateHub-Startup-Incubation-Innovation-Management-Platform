@@ -28,11 +28,15 @@ return new class extends Migration
         });
 
         Schema::create('sessions', function (Blueprint $table) {
+            // This table stores user session data when Laravel is configured to use the database session driver.
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
+            // nullable() means guest sessions can have no user ID.
+            // index() creates an index to speed up searches by user_id.
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
+            // Stores serialized session data
             $table->integer('last_activity')->index();
         });
     }

@@ -341,6 +341,44 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// ── THEME TOGGLE ─────────────────────────────────────────────────────────────
+function initThemeToggle() {
+    const toggle   = document.getElementById('themeToggle');
+    const icon     = document.getElementById('themeIcon');
+    const htmlEl   = document.documentElement;
+
+    if (! toggle) return;
+
+    // Load saved preference, fall back to OS preference
+    const saved = localStorage.getItem('ih-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = saved ?? (prefersDark ? 'dark' : 'light');
+
+    applyTheme(initial);
+
+    toggle.addEventListener('click', () => {
+        const current = htmlEl.getAttribute('data-theme');
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    function applyTheme(theme) {
+        htmlEl.setAttribute('data-theme', theme);
+        localStorage.setItem('ih-theme', theme);
+
+        if (icon) {
+            // setTimeout so the icon change feels intentional (not instant)
+            setTimeout(() => {
+                icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+            }, 80);
+        }
+    }
+
+    // Sync across tabs
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'ih-theme' && e.newValue) applyTheme(e.newValue);
+    });
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // BOOT — runs after DOM is ready
 // ─────────────────────────────────────────────────────────────────────────────
@@ -359,4 +397,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initCurrencyConverter();
     initTypingIndicator();
     initAjaxMessageSend();
+    initThemeToggle();
 });

@@ -16,7 +16,8 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user()->id)],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($this->user()->id)], 
+            // this ensures the email is unique, except for the currently logged-in user.
             'phone' => ['nullable', 'string', 'max:20'],
             'bio' => ['nullable', 'string', 'max:1000'],
             'linkedin' => ['nullable', 'url', 'max:255'],

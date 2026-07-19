@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->id();
             $table->foreignId('startup_idea_id')->constrained()->onDelete('cascade');
+            // This creates a foreign key that references the startup_ideas table.
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();

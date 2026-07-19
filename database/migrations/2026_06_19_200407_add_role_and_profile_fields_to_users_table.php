@@ -12,6 +12,8 @@ return new class extends Migration
             $table->enum('role', ['founder', 'mentor', 'investor', 'admin'])
                   ->default('founder')
                   ->after('email');
+            //   An ENUM restricts a column to a predefined list of values.
+            // Places the role column immediately after the email column in the table.
             $table->string('phone')->nullable()->after('role');
             $table->text('bio')->nullable()->after('phone');
             $table->string('avatar')->nullable()->after('bio');

@@ -21,21 +21,30 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">I am joining as a...</label>
+        <label class="form-label">I am joining as</label>
         <div class="row g-2">
-            @foreach (['founder' => ['🚀', 'Founder', 'Submit ideas & build teams'], 'mentor' => ['🎓', 'Mentor', 'Guide startups to success'], 'investor' => ['💼', 'Investor', 'Discover investment opportunities']] as $value => [$icon, $label, $desc])
-                <div class="col-md-4">
-                    <input type="radio" class="btn-check" name="role" id="role_{{ $value }}"
-                           value="{{ $value }}" {{ old('role') === $value ? 'checked' : '' }} required>
-                    <label class="btn btn-outline-primary w-100 text-start p-2" for="role_{{ $value }}">
-                        <div class="fs-5">{{ $icon }}</div>
-                        <div class="fw-medium small">{{ $label }}</div>
-                        <div class="text-muted" style="font-size:0.7rem">{{ $desc }}</div>
+            @foreach ([
+                'founder'  => ['🚀', 'Founder',  'Submit ideas & build teams'],
+                'mentor'   => ['🎓', 'Mentor',   'Guide startups to success'],
+                'investor' => ['💼', 'Investor', 'Discover opportunities'],
+            ] as $value => [$icon, $label, $desc])
+                <div class="col-4">
+                    <input type="radio"
+                           class="role-card-input visually-hidden"
+                           name="role"
+                           id="role_{{ $value }}"
+                           value="{{ $value }}"
+                           {{ old('role') === $value ? 'checked' : '' }}
+                           required>
+                    <label class="role-card-label" for="role_{{ $value }}">
+                        <span class="role-icon">{{ $icon }}</span>
+                        <span class="role-name">{{ $label }}</span>
+                        <span class="role-desc">{{ $desc }}</span>
                     </label>
                 </div>
             @endforeach
         </div>
-        @error('role') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+        @error('role') <div class="text-danger small mt-1" style="color:#fca5a5!important">{{ $message }}</div> @enderror
     </div>
 
     <div class="mb-3">
@@ -45,7 +54,7 @@
         @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <label class="form-label">Confirm Password</label>
         <input id="password_confirmation" type="password" name="password_confirmation" required
                class="form-control">
@@ -53,9 +62,9 @@
 
     <button type="submit" class="btn btn-primary w-100 py-2">Create Account</button>
 
-    <p class="text-center text-muted mt-3 mb-0 small">
+    <p class="text-center mt-3 mb-0" style="font-size:0.875rem;color:rgba(255,255,255,0.45)">
         Already have an account?
-        <a href="{{ route('login') }}" class="text-decoration-none">Sign in</a>
+        <a href="{{ route('login') }}">Sign in</a>
     </p>
 </form>
 @endsection

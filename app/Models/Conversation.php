@@ -47,7 +47,7 @@ class Conversation extends Model
             ->count();
     }
 
-    // Find or create a conversation between two users (always store lower ID first)
+    // Find or create a conversation between two users (always store lower ID first ro prevent duplicate)
     public static function between(int $userA, int $userB): self
     {
         [$one, $two] = $userA < $userB ? [$userA, $userB] : [$userB, $userA];
